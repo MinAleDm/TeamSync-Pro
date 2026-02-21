@@ -1,69 +1,153 @@
-# React + TypeScript + Vite
+# TeamSync Pro
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TeamSync Pro is a static-export SaaS-style Kanban app (Jira-lite) built with Next.js + TypeScript.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Next.js App Router (`output: 'export'`)
+- TypeScript
+- Zustand (slice-based store)
+- Tailwind CSS
+- @dnd-kit (drag & drop)
+- framer-motion (animations)
+- next-themes (dark mode)
+- localStorage as persistence layer
 
-## Expanding the ESLint configuration
+## Implemented Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Projects and task boards
+- Kanban statuses: To Do, In Progress, Review, Done
+- Drag & Drop task movement
+- Priority badges
+- Assignees and filtering
+- Search by title/description
+- Comments
+- Dark theme toggle
+- Skeleton loading state
+- Task edit modal via Portal
+- Custom fields (`text`, `number`, `select`) per project with values in `Task.customFields`
+- Optimistic updates with async localStorage persist and rollback on error
+- Undo stack with toast action for:
+  - move task
+  - delete task
+  - status change
+- Activity log in task modal for:
+  - task creation
+  - status changes
+  - assignee changes
+  - task edits
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Architecture (FSD)
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+  app/
+  entities/
+    activity/
+    project/
+    task/
+    user/
+  features/
+    board-filter/
+    project-selector/
+    task-create/
+    task-modal/
+    theme-toggle/
+    undo-toast/
+  shared/
+    config/
+    lib/
+      activity-log/
+      repository/
+      undo/
+      utils/
+    ui/
+  store/
+    slices/
+  widgets/
+    app-shell/
+    kanban-board/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Store Slices
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `projects`
+- `tasks`
+- `users`
+- `activityLog`
+- `undoStack`
+- `ui` (filters, active modal, persist state)
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Local Run
+
+```bash
+npm install
+npm run dev
 ```
+
+Open: `http://localhost:3000`
+
+## Production Build (static)
+
+```bash
+npm run build
+```
+
+Build output will be generated in `out/`.
+
+## GitHub Pages Deployment
+
+This project is ready for GitHub Pages:
+
+- `next.config.js` sets `output: 'export'`
+- repo-based `basePath` and `assetPrefix` are auto-calculated from:
+  - `GITHUB_ACTIONS`
+  - `GITHUB_REPOSITORY`
+
+### Example GitHub Actions workflow
+
+Create `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+## Notes
+
+- There is no backend and no API routes by design.
+- Data is stored in browser `localStorage`.
+- Demo data loads automatically on first run.
