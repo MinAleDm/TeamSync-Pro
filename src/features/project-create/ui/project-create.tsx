@@ -4,7 +4,7 @@ import { type FormEvent, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { useAppStore } from "@/store/use-app-store";
 
-export function ProjectCreate(): JSX.Element {
+export function ProjectCreate() {
   const createProject = useAppStore((state) => state.createProject);
 
   const [name, setName] = useState("");

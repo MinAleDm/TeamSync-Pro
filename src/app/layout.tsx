@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "SaaS-like Kanban board running on static export",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body>

@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { Button } from "@/shared/ui/button";
 
-export function ThemeToggle(): JSX.Element {
+export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (

@@ -2,7 +2,7 @@
 
 import { useAppStore } from "@/store/use-app-store";
 
-export function ProjectSelector(): JSX.Element {
+export function ProjectSelector() {
   const projects = useAppStore((state) => state.projects);
   const selectedProjectId = useAppStore((state) => state.selectedProjectId);
   const setSelectedProject = useAppStore((state) => state.setSelectedProject);

@@ -25,7 +25,7 @@ function TaskCard({
   task: Task;
   assignee: string;
   onOpen: (taskId: string) => void;
-}): JSX.Element {
+}) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id,
     data: { status: task.status },
@@ -70,7 +70,7 @@ function BoardColumn({
   tasks: Task[];
   assigneeByTask: Map<string, string>;
   onOpen: (taskId: string) => void;
-}): JSX.Element {
+}) {
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
   return (
@@ -98,7 +98,7 @@ function BoardColumn({
   );
 }
 
-export function KanbanBoard(): JSX.Element {
+export function KanbanBoard() {
   const tasks = useAppStore((state) => state.tasks);
   const users = useAppStore((state) => state.users);
   const selectedProjectId = useAppStore((state) => state.selectedProjectId);

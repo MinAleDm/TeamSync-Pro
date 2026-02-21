@@ -7,7 +7,7 @@ interface ButtonProps extends PropsWithChildren, ButtonHTMLAttributes<HTMLButton
   variant?: ButtonVariant;
 }
 
-export function Button({ children, className, variant = "secondary", ...props }: ButtonProps): JSX.Element {
+export function Button({ children, className, variant = "secondary", ...props }: ButtonProps) {
   return (
     <button
       className={clsx(

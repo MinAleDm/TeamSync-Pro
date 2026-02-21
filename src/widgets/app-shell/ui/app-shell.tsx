@@ -12,7 +12,7 @@ import { SkeletonBoard } from "@/shared/ui/skeleton-board";
 import { useAppStore } from "@/store/use-app-store";
 import { KanbanBoard } from "@/widgets/kanban-board/ui/kanban-board";
 
-export function AppShell(): JSX.Element {
+export function AppShell() {
   const initialize = useAppStore((state) => state.initialize);
   const isLoading = useAppStore((state) => state.isLoading);
   const persistStatus = useAppStore((state) => state.persistStatus);

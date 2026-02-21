@@ -4,7 +4,7 @@ import { type FormEvent, useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { useAppStore } from "@/store/use-app-store";
 
-export function TaskCreate(): JSX.Element {
+export function TaskCreate() {
   const selectedProjectId = useAppStore((state) => state.selectedProjectId);
   const users = useAppStore((state) => state.users);
   const createTask = useAppStore((state) => state.createTask);

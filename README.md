@@ -104,6 +104,15 @@ This project is ready for GitHub Pages:
   - `GITHUB_ACTIONS`
   - `GITHUB_REPOSITORY`
 
+Quick start:
+
+1. Push project to GitHub (`main` branch).
+2. In repository settings open `Settings -> Pages`.
+3. Set `Source` to `GitHub Actions`.
+4. Push a commit to `main` (or run workflow manually from Actions tab).
+5. Wait for workflow `Deploy to GitHub Pages` to finish.
+6. Open site at `https://<username>.github.io/<repo>/`.
+
 ### Example GitHub Actions workflow
 
 Create `.github/workflows/deploy.yml`:

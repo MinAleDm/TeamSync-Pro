@@ -2,7 +2,7 @@
 
 import { useAppStore } from "@/store/use-app-store";
 
-export function BoardFilter(): JSX.Element {
+export function BoardFilter() {
   const users = useAppStore((state) => state.users);
   const searchQuery = useAppStore((state) => state.searchQuery);
   const assigneeFilter = useAppStore((state) => state.assigneeFilter);

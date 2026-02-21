@@ -5,7 +5,7 @@ interface PriorityBadgeProps {
   priority: TaskPriority;
 }
 
-export function PriorityBadge({ priority }: PriorityBadgeProps): JSX.Element {
+export function PriorityBadge({ priority }: PriorityBadgeProps) {
   return (
     <span
       className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${PRIORITY_STYLES[priority]}`}

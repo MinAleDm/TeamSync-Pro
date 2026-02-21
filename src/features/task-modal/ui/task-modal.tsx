@@ -26,7 +26,7 @@ const emptyDraft: TaskDraft = {
   assigneeId: null,
 };
 
-export function TaskModal(): JSX.Element | null {
+export function TaskModal() {
   const tasks = useAppStore((state) => state.tasks);
   const users = useAppStore((state) => state.users);
   const projects = useAppStore((state) => state.projects);

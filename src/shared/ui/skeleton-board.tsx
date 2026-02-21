@@ -1,4 +1,4 @@
-export function SkeletonBoard(): JSX.Element {
+export function SkeletonBoard() {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       {Array.from({ length: 4 }).map((_, colIdx) => (

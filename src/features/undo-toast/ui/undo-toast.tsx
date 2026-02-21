@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/shared/ui/button";
 import { useAppStore } from "@/store/use-app-store";
 
-export function UndoToast(): JSX.Element {
+export function UndoToast() {
   const undoStack = useAppStore((state) => state.undoStack);
   const undoLastAction = useAppStore((state) => state.undoLastAction);
 
