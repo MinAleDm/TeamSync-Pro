@@ -1,33 +1,23 @@
 {
-  "name": "team-sync-pro",
+  "name": "tracker-monorepo",
   "private": true,
   "version": "1.0.0",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=20.11.1",
+    "pnpm": ">=9.0.0"
   },
-  "dependencies": {
-    "@dnd-kit/core": "^6.3.1",
-    "@dnd-kit/utilities": "^3.2.2",
-    "clsx": "^2.1.1",
-    "framer-motion": "^11.18.2",
-    "next": "^15.5.12",
-    "next-themes": "^0.4.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "zustand": "^5.0.2"
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter @tracker/api --filter @tracker/web dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "db:generate": "pnpm --filter @tracker/db prisma:generate",
+    "db:migrate": "pnpm --filter @tracker/db prisma:migrate",
+    "db:seed": "pnpm --filter @tracker/db prisma:seed",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down -v"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
-    "@types/react": "^19.0.2",
-    "@types/react-dom": "^19.0.2",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^9.17.0",
-    "eslint-config-next": "^15.1.6",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16",
-    "typescript": "^5.7.2"
+    "typescript": "^5.8.2"
   }
 }
