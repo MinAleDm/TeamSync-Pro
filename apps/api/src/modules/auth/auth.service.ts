@@ -5,8 +5,26 @@ import type { AuthSessionDto, AuthTokensDto, LoginDto } from "@tracker/types";
 import { UsersService } from "../users/users.service";
 import { AuthRepository } from "./auth.repository";
 
-function toExpiryDate(duration: string): Date {
+type TokenTtl = `${number}${"ms" | "s" | "m" | "h" | "d" | "w" | "y"}`;
+
+const DURATION_PATTERN = /^\d+(ms|s|m|h|d|w|y)$/;
+
+function resolveTokenTtl(duration: string | undefined, fallback: TokenTtl): TokenTtl {
+  if (duration && DURATION_PATTERN.test(duration)) {
+    return duration as TokenTtl;
+  }
+
+  return fallback;
+}
+
+function toExpiryDate(duration: TokenTtl): Date {
   const value = Number.parseInt(duration, 10);
+  if (duration.endsWith("ms")) {
+    return new Date(Date.now() + value);
+  }
+  if (duration.endsWith("s")) {
+    return new Date(Date.now() + value * 1000);
+  }
   if (duration.endsWith("m")) {
     return new Date(Date.now() + value * 60 * 1000);
   }
@@ -15,6 +33,12 @@ function toExpiryDate(duration: string): Date {
   }
   if (duration.endsWith("d")) {
     return new Date(Date.now() + value * 24 * 60 * 60 * 1000);
+  }
+  if (duration.endsWith("w")) {
+    return new Date(Date.now() + value * 7 * 24 * 60 * 60 * 1000);
+  }
+  if (duration.endsWith("y")) {
+    return new Date(Date.now() + value * 365 * 24 * 60 * 60 * 1000);
   }
   return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 }
@@ -87,8 +111,8 @@ export class AuthService {
   }
 
   private async issueTokens(userId: string, email: string, role: "ADMIN" | "USER"): Promise<AuthTokensDto> {
-    const accessTtl = process.env.JWT_ACCESS_TTL ?? "15m";
-    const refreshTtl = process.env.JWT_REFRESH_TTL ?? "7d";
+    const accessTtl = resolveTokenTtl(process.env.JWT_ACCESS_TTL, "15m");
+    const refreshTtl = resolveTokenTtl(process.env.JWT_REFRESH_TTL, "7d");
     const payload = { sub: userId, email, role };
 
     const [accessToken, refreshToken] = await Promise.all([
