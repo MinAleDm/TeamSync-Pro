@@ -1,0 +1,21 @@
+name: PR Check
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-check-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr-validate:
+    name: PR Validate
+    uses: ./.github/workflows/_validate.yml

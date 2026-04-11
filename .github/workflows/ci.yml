@@ -1,24 +1,19 @@
-name: Monorepo CI
+name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
-  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-      - run: pnpm install --no-frozen-lockfile
-      - run: pnpm --filter @tracker/db prisma:generate
-      - run: pnpm typecheck
-      - run: pnpm build
+  ci-validate:
+    name: CI Validate
+    uses: ./.github/workflows/_validate.yml
