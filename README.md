@@ -230,3 +230,4 @@ pnpm docker:down
 
 - This repository is scaffolded to be production-oriented, but dependency installation and runtime verification still need to happen in the target environment.
 - The existing UI from the original single-app project was reorganized into `apps/web` and reworked to use the new API contract.
+
