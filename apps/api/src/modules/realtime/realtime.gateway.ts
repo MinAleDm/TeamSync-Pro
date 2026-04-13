@@ -1,6 +1,7 @@
-import { Logger, UseGuards } from "@nestjs/common";
+import { Logger } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -48,7 +49,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   }
 
   @SubscribeMessage("project:subscribe")
-  subscribeProject(client: Socket, @MessageBody() projectId: string) {
+  subscribeProject(@ConnectedSocket() client: Socket, @MessageBody() projectId: string) {
     void client.join(`project:${projectId}`);
     return { subscribed: projectId };
   }
