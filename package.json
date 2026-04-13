@@ -8,12 +8,13 @@
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "dev": "pnpm -r --parallel --filter @tracker/api --filter @tracker/web dev",
-    "build": "pnpm -r build",
-    "typecheck": "pnpm -r typecheck",
-    "db:generate": "pnpm --filter @tracker/db prisma:generate",
-    "db:migrate": "pnpm --filter @tracker/db prisma:migrate",
-    "db:seed": "pnpm --filter @tracker/db prisma:seed",
+    "dev": "corepack pnpm -r --parallel --filter @tracker/api --filter @tracker/web dev",
+    "build": "corepack pnpm run db:generate && corepack pnpm -r build",
+    "typecheck": "corepack pnpm run db:generate && corepack pnpm -r typecheck",
+    "test": "corepack pnpm run db:generate && corepack pnpm --filter @tracker/api test",
+    "db:generate": "corepack pnpm --filter @tracker/db prisma:generate",
+    "db:migrate": "corepack pnpm --filter @tracker/db prisma:migrate",
+    "db:seed": "corepack pnpm --filter @tracker/db prisma:seed",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down -v"
   },

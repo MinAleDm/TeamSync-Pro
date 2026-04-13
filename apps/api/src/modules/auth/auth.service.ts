@@ -1,6 +1,7 @@
+import { createHash, randomUUID } from "node:crypto";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { compare, hash } from "bcryptjs";
+import { compare } from "bcryptjs";
 import type { AuthSessionDto, AuthTokensDto, LoginDto } from "@tracker/types";
 import { UsersService } from "../users/users.service";
 import { AuthRepository } from "./auth.repository";
@@ -41,6 +42,10 @@ function toExpiryDate(duration: TokenTtl): Date {
     return new Date(Date.now() + value * 365 * 24 * 60 * 60 * 1000);
   }
   return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+}
+
+function hashRefreshToken(token: string): string {
+  return createHash("sha256").update(token).digest("hex");
 }
 
 @Injectable()
@@ -119,14 +124,16 @@ export class AuthService {
       this.jwtService.signAsync(payload, {
         secret: process.env.JWT_ACCESS_SECRET ?? "replace-me-access",
         expiresIn: accessTtl,
+        jwtid: randomUUID(),
       }),
       this.jwtService.signAsync(payload, {
         secret: process.env.JWT_REFRESH_SECRET ?? "replace-me-refresh",
         expiresIn: refreshTtl,
+        jwtid: randomUUID(),
       }),
     ]);
 
-    await this.authRepository.createRefreshToken(userId, await hash(refreshToken, 10), toExpiryDate(refreshTtl));
+    await this.authRepository.createRefreshToken(userId, hashRefreshToken(refreshToken), toExpiryDate(refreshTtl));
 
     return {
       accessToken,
@@ -138,8 +145,10 @@ export class AuthService {
     tokens: Array<{ id: string; tokenHash: string }>,
     refreshToken: string,
   ): Promise<{ id: string; tokenHash: string } | null> {
+    const refreshTokenHash = hashRefreshToken(refreshToken);
+
     for (const token of tokens) {
-      const isMatch = await compare(refreshToken, token.tokenHash);
+      const isMatch = token.tokenHash === refreshTokenHash;
       if (isMatch) {
         return token;
       }
