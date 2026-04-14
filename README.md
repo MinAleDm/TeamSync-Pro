@@ -1,5 +1,10 @@
 # Tracker Monorepo
 
+[![CI](https://github.com/minkinad/tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/minkinad/tracker/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/minkinad/tracker)](https://github.com/minkinad/tracker/blob/main/LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D20.11.1-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-9.15.4-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+
 Scalable task tracking monorepo inspired by Yandex Tracker, built with `pnpm` workspaces, `Next.js`, `NestJS`, `PostgreSQL`, `Prisma`, `Redis`, and Socket.IO.
 
 ## Stack
@@ -230,4 +235,3 @@ pnpm docker:down
 
 - This repository is scaffolded to be production-oriented, but dependency installation and runtime verification still need to happen in the target environment.
 - The existing UI from the original single-app project was reorganized into `apps/web` and reworked to use the new API contract.
-
